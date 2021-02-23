@@ -14,10 +14,13 @@ import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AddIcon from "@material-ui/icons/Add";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function Sidebar() {
   const [channels, loading, error] = useCollection(db.collection("rooms"));
+  const [user] = useAuthState(auth);
+
   return (
     <SidebarContainer>
       <SidebarHeader>
@@ -25,7 +28,7 @@ function Sidebar() {
           <h2>Slack Clone</h2>
           <h3>
             <FiberManualRecordIcon />
-            Bu Yong Tatt
+            {user.displayName}
           </h3>
         </SidebarInfo>
         <CreateIcon />
@@ -58,7 +61,7 @@ const SidebarContainer = styled.div`
   border-top: 1px solid #49274b;
   max-width: 260px;
   margin-top: 60px;
-
+  overflow-y: scroll;
   > hr {
     margin-top: 10px;
     margin-bottom: 10px;
